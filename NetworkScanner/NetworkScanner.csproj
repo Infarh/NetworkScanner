@@ -20,4 +20,8 @@
 
   </PropertyGroup>
 
+  <ItemGroup>
+    <Using Include="System.Net.NetworkInformation" />
+  </ItemGroup>
+
 </Project>
