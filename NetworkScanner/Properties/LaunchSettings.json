@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "nscan": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}
