@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Using Include="System.Net.NetworkInformation" />
+    <Using Include="NetworkScanner" />
   </ItemGroup>
 
 </Project>
