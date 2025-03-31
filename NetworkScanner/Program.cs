@@ -16,15 +16,18 @@ Console.CancelKeyPress += (_, e) =>
 
 var timeout = 500;
 
-var scanner = new Scanner(gateway_ip, timeout);
+Console.Title = $"gate {gateway_ip}";
 
-scanner.PermanentTimeout = 250;
+var scanner = new Scanner(gateway_ip, timeout)
+{
+    PermanentTimeout = 250
+};
 
 await scanner.ScanAsync(cancellation.Token);
 
 //Console.WriteLine($"Gateway: {gateway_ip}");
 
-//var ping_tasks = gateway_ip.GetSubnetIPs().Select(Scanner.PingAddressAsync);
+//var ping_tasks = gateway_ip.EnumSubnetIPs().Select(Scanner.PingAddressAsync);
 
 //var results = await Task.WhenAll(ping_tasks);
 

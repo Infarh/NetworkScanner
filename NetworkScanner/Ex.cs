@@ -32,7 +32,7 @@ internal static class Ex
         return new(address_bytes);
     }
 
-    public static IEnumerable<IPAddress> GetSubnetIPs(this IPAddress GatewayIP)
+    public static IEnumerable<IPAddress> EnumSubnetIPs(this IPAddress GatewayIP)
     {
         NetworkInterface? network_interface = null;
         foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())

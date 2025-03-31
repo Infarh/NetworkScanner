@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 
 namespace NetworkScanner;
@@ -8,16 +7,13 @@ internal sealed class Scanner
 {
     private readonly Pinger[] _Pingers;
 
-    private readonly FrozenDictionary<IPAddress, Pinger> _PingersPool;
-
     public Scanner(IPAddress GatewayIP, int Timeout)
     {
-        _Pingers = GatewayIP
-            .GetSubnetIPs()
-            .Select(ip => new Pinger(ip, Timeout))
-            .ToArray();
-
-        _PingersPool = _Pingers.ToFrozenDictionary(p => p.IP);
+        var pingers = new List<Pinger>(255);
+        // ReSharper disable once LoopCanBeConvertedToQuery
+        foreach (var ip in GatewayIP.EnumSubnetIPs())
+            pingers.Add(new(ip, Timeout));
+        _Pingers = [.. pingers];
     }
 
     public int PermanentTimeout { get; set; }
@@ -43,6 +39,8 @@ internal sealed class Scanner
             var host = pinger.HostName;
             var line = printer.WriteLine(host is null ? $"[{timeout,4}ms]{ip}" : $"[{timeout,4}ms]{ip} - {host}");
         }
+
+        printer.EndPrint();
     }
 
     private async Task ScanLoopAsync(int Timeout, CancellationToken Cancel)

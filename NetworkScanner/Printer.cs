@@ -6,8 +6,6 @@ internal sealed class Printer
 
     public static Printer Instance { get; } = new();
 
-    private static readonly Dictionary<int, string> __FullLines = [];
-
     private Printer() { }
 
     private int _MaxLinesCount;
@@ -15,14 +13,6 @@ internal sealed class Printer
     private readonly Dictionary<int, int> _LineLength = [];
 
     private readonly int _StartLineIndex = Console.CursorTop;
-
-    private static string GetEmptyLine(int LineLength)
-    {
-        if (!__FullLines.TryGetValue(LineLength, out var full_line))
-            __FullLines.Add(LineLength, full_line = new(' ', LineLength));
-
-        return full_line;
-    }
 
     public void Clear()
     {
@@ -47,7 +37,7 @@ internal sealed class Printer
 
             if (last_line_length - str.Length is > 0 and var line_len_delta)
             {
-                var empty_line = GetEmptyLine(line_len_delta);
+                var empty_line = Line.Empty(line_len_delta);
                 Console.WriteLine(empty_line);
             }
             else
@@ -57,12 +47,12 @@ internal sealed class Printer
         }
     }
 
-    private void EndPrint()
+    public void EndPrint()
     {
         lock (__Lock)
         {
             var buffer_width = Console.BufferWidth;
-            var full_line = GetEmptyLine(buffer_width);
+            var full_line = Line.Empty(buffer_width);
 
             var end_line = Console.CursorTop;
 
